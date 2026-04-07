@@ -1,0 +1,287 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+ 
+ 
+/* Estilos del body  */
+body {
+    font-family: sans-serif;
+    background-color: #f0f4ec; /* verde muy claro del fondo */
+    height: 100vh;
+}
+ 
+ 
+.wrapper {
+    display: flex;       /* activa modo fila */
+    height: 100vh;       /* ocupa toda la altura de la pantalla */
+}
+ 
+ 
+/* Panel izquierdo */
+.sidebar {
+    width: 210px;                        /* ancho fijo */
+    background: #ffffff;
+    border-right: 1px solid #e0e0e0;    /* línea gris que lo separa del contenido */
+    display: flex;
+    flex-direction: column;              /* logo arriba, nav en medio, footer abajo */
+    flex-shrink: 0;                      /* no se encoge si la pantalla es pequeña */
+}
+ 
+/* Logo en la parte superior del sidebar */
+.sidebar-logo {
+    padding: 20px 16px 14px;
+    display: flex;
+    align-items: center;                 /* centra verticalmente el ícono y el texto */
+    gap: 10px;                           /* espacio entre el ícono y "SIBEM" */
+    border-bottom: 1px solid #e8e8e8;
+}
+ 
+.logo-icon {
+    width: 36px;
+    height: 36px;
+    background-color: #3B6D11;           /* verde oscuro */
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+ 
+.logo-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: white;                         /* ícono blanco sobre fondo verde */
+}
+ 
+.sidebar-logo span {
+    font-size: 23px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+ 
+ 
+/* ── Botones de navegación del sidebar ── */
+.sidebar-nav {
+    flex: 1;                             /* ocupa el espacio sobrante entre logo y footer */
+    padding: 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;                            /* separación entre botones */
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;                           /* espacio entre ícono y texto del botón */
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-size: 20px;
+    color: #555;
+    cursor: pointer;
+}
+/*Esto es creado para animación de que cuando pases el cursor se seleccione ligeramente del color seleccionado*/ 
+.nav-btn:hover {
+    background-color: #fdffdd;
+    
+}
+ 
+/* Botón de la página activa (actual) */
+.nav-btn.active {
+    background-color: #ffff71;           /* amarillo  */
+    font-weight: 600;
+}
+ 
+.nav-btn svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;                      /* el ícono no se encoge */
+}
+ 
+ 
+/* ── Footer del sidebar (sección del usuario) ── */
+.sidebar-footer {
+    padding: 12px 10px;
+    border-top: 1px solid #e8e8e8;
+}
+ 
+.user-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+}
+ 
+/* Círculo con la inicial del usuario */
+.avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;                  /* hace el div circular */
+    background-color: #C0DD97;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #3B6D11;
+    flex-shrink: 0;
+}
+ 
+.user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+ 
+.user-role {
+    font-size: 11px;
+    color: #999;
+    cursor: pointer;
+}
+ 
+/* Botón de cerrar sesión */
+.logout-btn {
+    margin-left: auto;                   /* lo empuja al extremo derecho */
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+}
+ 
+.logout-btn:hover {
+    background-color: #ffff71
+}
+ 
+ 
+/* ════════════════════════════
+   ÁREA PRINCIPAL — Derecha
+════════════════════════════ */
+.main-area {
+    flex: 1;                             /* ocupa todo el espacio restante */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+ 
+/* Barra superior con el nombre del instituto */
+.topbar {
+    background: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+ 
+.inst-logo {
+    width: 38px;
+    height: 38px;
+    background-color: #EAF3DE;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #3B6D11;
+}
+ 
+.inst-name {
+    font-size: 32px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+ 
+/* Zona de contenido con scroll vertical */
+.content-area {
+    flex: 1;
+    overflow-y: auto;                    /* scroll solo en esta zona, no en toda la página */
+    padding: 24px;
+}
+ 
+ 
+/* ════════════════════════════
+   BARRA DE BÚSQUEDA Y FILTROS
+════════════════════════════ */
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;                     /* en pantallas pequeñas baja a siguiente línea */
+}
+ 
+/* Caja del buscador (lupa + input juntos) */
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px 14px;
+    flex: 1;                             /* se estira para ocupar el espacio disponible */
+    min-width: 200px;
+}
+ 
+.search-box svg {
+    width: 15px;
+    height: 15px;
+    fill: #aaa;
+    flex-shrink: 0;
+}
+ 
+.search-box input {
+    border: none;
+    outline: none;
+    font-size: 13px;
+    color: #333;
+    width: 100%;
+    background: transparent;
+}
+ 
+/* Dropdowns de filtro (Categoría y Estado) */
+.filter-select {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #555;
+    cursor: pointer;
+    outline: none;
+}
+ 
+.filter-select:focus {
+    border-color: #3B6D11;               /* borde verde al hacer click */
+}
+ 
+/* Botón "+ Agregar libro" */
+.add-btn {
+    background-color: #ffffff;
+    color: #555;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;                 /* evita que el texto se parta en dos líneas */
+}
+ 
+.add-btn:hover {
+    background-color: #ffff71       /* verde más oscuro al pasar el mouse */
+}
+ 
+ 
