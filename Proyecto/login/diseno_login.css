@@ -1,0 +1,60 @@
+/* =============================================
+   diseno_login.css — Estilos para login SIBEM
+   ============================================= */
+
+/* Color de fondo verde oscuro que se ve en la referencia */
+body {
+    background-color: #1e4d2b;
+    min-height: 100vh;
+}
+
+/* Panel izquierdo verde claro decorativo */
+.panel-decorativo {
+    background-color: #c8e6c9;
+    border-radius: 8px;
+    min-height: 320px;
+}
+
+/* Inputs con fondo verde muy claro, igual a la referencia */
+.input-sibem {
+    background-color: #e8f5e9 !important;
+    border: 1px solid #a5d6a7 !important;
+    border-radius: 6px;
+}
+
+.input-sibem:focus {
+    background-color: #e8f5e9 !important;
+    border-color: #388e3c !important;
+    box-shadow: 0 0 0 0.2rem rgba(56, 142, 60, 0.25) !important;
+}
+
+/* Ícono dentro del input */
+.input-group-text {
+    background-color: #e8f5e9 !important;
+    border: 1px solid #a5d6a7 !important;
+}
+
+/* Botón Login igual al de la referencia */
+.btn-login {
+    background-color: #e8f5e9;
+    border: 1px solid #a5d6a7;
+    color: #1b5e20;
+    font-weight: 500;
+}
+
+.btn-login:hover {
+    background-color: #c8e6c9;
+    border-color: #388e3c;
+    color: #1b5e20;
+}
+
+/* Link de olvidó contraseña */
+.link-olvido {
+    color: #2e7d32;
+    font-size: 0.85rem;
+    text-decoration: underline;
+}
+
+.link-olvido:hover {
+    color: #1b5e20;
+}
