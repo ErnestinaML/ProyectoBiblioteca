@@ -6,6 +6,21 @@
     <title>SIBEM</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="diseno.css">
+    <script>
+// Función para manejar la selección de botones
+function seleccionarBoton(btn) {
+    // Obtener todos los botones de navegación
+    const botones = document.querySelectorAll('.nav-btn');
+    
+    // Remover la clase 'active' de todos los botones
+    botones.forEach(boton => {
+        boton.classList.remove('active');
+    });
+    
+    // Agregar la clase 'active' al botón que se clickeó
+    btn.classList.add('active');
+}
+</script>
 </head>
 <body>
 
@@ -26,23 +41,23 @@
         <nav class="sidebar-nav">
 
             <!-- active = página actual resaltada -->
-            <button class="nav-btn active">
+            <button class="nav-btn active" onclick="seleccionarBoton(this); location.href='inicio.php'">
                 <svg fill="currentColor"viewBox="0 0 16 16"><path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"/></svg>    
                     
                 Inicio
             </button>
 
-            <button class="nav-btn">
+            <button class="nav-btn" onclick="seleccionarBoton(this); location.href='../prestamos/prestamos.php'">
                 <svg fill="currentColor" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5M9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8m1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5m-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96q.04-.245.04-.5M7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0"/></svg>          
                 Préstamos
             </button>
 
-            <button class="nav-btn">
+            <button class="nav-btn" onclick="seleccionarBoton(this); location.href='inicio.php'">
                 <svg fill="currentColor" viewBox="0 0 16 16"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/></svg>
                 Usuarios
             </button>
 
-            <button class="nav-btn">
+            <button class="nav-btn"  onclick="seleccionarBoton(this); location.href='inicio.php'">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
                 Estadísticas
             </button>
@@ -102,88 +117,19 @@
                     <option value="prestado">Reserva</option>
                 </select>
 
-                <button class="add-btn" onclick="document.getElementById('formAgregar').classList.toggle('d-none')">
-                    + Agregar libro
-                </button>
-            </div>
+                <button class="add-btn" onclick="cargarFormulario()">+ Agregar libro</button>
+                <div id="contenedorFormulario"></div>
 
-            <!-- ── Formulario oculto (d-none) ── -->
-            <!-- Empieza oculto, el botón de arriba lo muestra -->
-            <div id="formAgregar" class="d-none bg-white rounded p-4 shadow-sm mb-4">
+                <script>
+                function cargarFormulario() {
+                    fetch('agregarLibro.php')
+                        .then(res => res.text())
+                        .then(html => {
+                            document.getElementById('contenedorFormulario').innerHTML = html;
+                        });
+                }
+                </script>
 
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5 class="fw-semibold mb-0">Agregar Libro</h5>
-                    <!-- Botón X cierra el formulario -->
-                    <button type="button" class="btn-close"
-                            onclick="document.getElementById('formAgregar').classList.add('d-none')">
-                    </button>
-                </div>
-
-                <form>
-                    <!-- FILA 1 -->
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Título <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Título del libro">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Autor <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Autor del libro">
-                        </div>
-                    </div>
-
-                    <!-- FILA 2 -->
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Año de publicación <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" placeholder="Año de publicación">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Editorial <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Editorial del libro">
-                        </div>
-                    </div>
-
-                    <!-- FILA 3 -->
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">ISBN <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="ISBN del libro">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Edición <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Número de edición">
-                        </div>
-                    </div>
-
-                    <!-- FILA 4 -->
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Ejemplares <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" placeholder="Número de ejemplares">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Categoría <span class="text-danger">*</span></label>
-                            <select class="form-select">
-                                <option value="">Seleccione la categoría</option>
-                                <option value="ingenieria">Ingeniería</option>
-                                <option value="ciencias">Ciencias</option>
-                                <option value="matematicas">Matemáticas</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- BOTONES -->
-                    <div class="d-flex justify-content-end gap-2">
-                        <button type="submit" class="btn btn-success px-4">Agregar Libro</button>
-                        <button type="button" class="btn btn-danger px-4"
-                                onclick="document.getElementById('formAgregar').classList.add('d-none')">
-                            Cancelar
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <!-- fin formAgregar -->
 
         </div>
     </main>
