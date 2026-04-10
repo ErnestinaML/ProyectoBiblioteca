@@ -1,3 +1,9 @@
+<?php
+$conn = new mysqli("localhost", "root", "5775", "biblioteca");
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,65 +12,150 @@
     <title>SIBEM</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="diseno.css">
-    <script>
-// Función para manejar la selección de botones
-function seleccionarBoton(btn) {
-    // Obtener todos los botones de navegación
-    const botones = document.querySelectorAll('.nav-btn');
-    
-    // Remover la clase 'active' de todos los botones
-    botones.forEach(boton => {
-        boton.classList.remove('active');
-    });
-    
-    // Agregar la clase 'active' al botón que se clickeó
-    btn.classList.add('active');
-}
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .chip-filtro {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 13px;
+            border: 1.5px solid #ccc;
+            border-radius: 6px;
+            background: #fff;
+            font-size: 12px;
+            color: #444;
+            cursor: pointer;
+            transition: border-color .12s, background .12s;
+        }
+        .chip-filtro:hover  { border-color: #b8b800; background: #fafae0; }
+        .chip-filtro.active { background: #f5e840; border-color: #b8b800; font-weight: 500; color: #1a1a00; }
+
+        .hcard {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid #e0e0c0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            background: #fff;
+            cursor: pointer;
+            transition: border-color .12s, background .12s;
+        }
+        .hcard:hover { border-color: #b8b800; background: #fffdf5; }
+
+        .hcard-icono {
+            width: 42px;
+            height: 54px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .hcard-spine {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 7px;
+            border-radius: 5px 0 0 5px;
+            opacity: .45;
+        }
+        .hcard-main        { flex: 1; min-width: 0; }
+        .hcard-title       { font-size: 13px; font-weight: 500; color: #1a1a00; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .hcard-sub         { font-size: 11px; color: #666; margin-bottom: 6px; }
+        .hcard-pills       { display: flex; gap: 5px; flex-wrap: wrap; }
+        .hpill             { font-size: 10px; padding: 2px 8px; border-radius: 10px; border: 1px solid #ddd; color: #666; background: #f9f9f0; }
+
+        .hcard-right       { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; min-width: 90px; }
+        .hcard-disp-num    { font-size: 22px; font-weight: 500; line-height: 1; }
+        .hcard-disp-lbl    { font-size: 10px; color: #aaa; }
+        .hcard-badge       { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 500; }
+        .badge-verde       { background: #eaf3de; color: #27500a; }
+        .badge-amarillo    { background: #faeeda; color: #633806; }
+        .badge-rojo        { background: #fcebeb; color: #791f1f; }
+        .badge-gris        { background: #f1efe8; color: #444441; }
+
+        .hcard-det-btn     { padding: 4px 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 11px; background: #fff; cursor: pointer; color: #555; }
+        .hcard-det-btn:hover { border-color: #b8b800; background: #fafae0; }
+
+        .sin-resultados    { text-align: center; padding: 40px 20px; color: #aaa; font-size: 13px; }
+        .filtros-row       { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+        .results-header    { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .results-header span { font-size: 13px; color: #555; }
+    </style>
 </head>
 <body>
 
+<?php if (isset($_GET['exito'])): ?>
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Material agregado correctamente',
+        confirmButtonColor: '#198754'
+    }).then(() => {
+        window.history.replaceState({}, document.title, 'inicio.php');
+    });
+</script>
+<?php elseif (isset($_GET['error'])): ?>
+<script>
+    <?php
+        $errores = [
+            'campos_vacios'  => 'Faltan campos obligatorios',
+            'insert_fallido' => 'Error al guardar el material'
+        ];
+        $msg = $errores[$_GET['error']] ?? 'Error desconocido';
+    ?>
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: '<?= $msg ?>',
+        confirmButtonColor: '#dc3545'
+    }).then(() => {
+        window.history.replaceState({}, document.title, 'inicio.php');
+    });
+</script>
+<?php endif; ?>
+
 <div class="wrapper">
 
+    <!-- ── SIDEBAR ── -->
     <aside class="sidebar">
-
-        <!-- Logo -->
         <div class="sidebar-logo">
             <div class="logo-icon">
-                <!-- Ícono de libro -->
-                 <svg viewBox="0 -960 960 960" fill="#currentColor"><path d="M240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80H240Zm0-80h480v-640h-80v280l-100-60-100 60v-280H240v640Zm0 0v-640 640Zm200-360 100-60 100 60-100-60-100 60Z"/></svg>       
+                <svg viewBox="0 -960 960 960" fill="currentColor"><path d="M240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80H240Zm0-80h480v-640h-80v280l-100-60-100 60v-280H240v640Zm0 0v-640 640Zm200-360 100-60 100 60-100-60-100 60Z"/></svg>
             </div>
             <span>SIBEM</span>
         </div>
 
-        <!-- Botones de navegación -->
         <nav class="sidebar-nav">
-
-            <!-- active = página actual resaltada -->
             <button class="nav-btn active" onclick="seleccionarBoton(this); location.href='inicio.php'">
-                <svg fill="currentColor"viewBox="0 0 16 16"><path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"/></svg>    
-                    
+                <svg fill="currentColor" viewBox="0 0 16 16"><path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"/></svg>
                 Inicio
             </button>
-
             <button class="nav-btn" onclick="seleccionarBoton(this); location.href='../prestamos/prestamos.php'">
-                <svg fill="currentColor" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5M9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8m1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5m-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96q.04-.245.04-.5M7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0"/></svg>          
+                <svg fill="currentColor" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5M9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8m1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5m-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96q.04-.245.04-.5M7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0"/></svg>
                 Préstamos
             </button>
-
-            <button class="nav-btn" onclick="seleccionarBoton(this); location.href='inicio.php'">
+            <button class="nav-btn" onclick="seleccionarBoton(this);">
                 <svg fill="currentColor" viewBox="0 0 16 16"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/></svg>
                 Usuarios
             </button>
-
-            <button class="nav-btn"  onclick="seleccionarBoton(this); location.href='inicio.php'">
+            <button class="nav-btn" onclick="seleccionarBoton(this);">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                Adeudos
+            </button>
+            <button class="nav-btn" onclick="seleccionarBoton(this);">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
                 Estadísticas
             </button>
-
+             <button class="nav-btn" onclick="seleccionarBoton(this);">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                Roles
+            </button>
         </nav>
 
-        <!-- Usuario al fondo del sidebar -->
         <div class="sidebar-footer">
             <div class="user-row">
                 <div class="avatar">A</div>
@@ -72,69 +163,320 @@ function seleccionarBoton(btn) {
                     <div class="user-name">Administrador</div>
                     <div class="user-role">Perfil</div>
                 </div>
-                <!-- Botón de cerrar sesión -->
                 <button class="logout-btn" title="Cerrar sesión">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
-                    </svg>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
                 </button>
             </div>
         </div>
-
     </aside>
 
-    <!-- ÁREA PRINCIPAL - Derecha -->
+    <!-- ── ÁREA PRINCIPAL ── -->
     <main class="main-area">
 
-        <!-- Barra superior con logo del instituto -->
         <div class="topbar">
-            <img src="../img/Logo.png" alt="Logo ITSCC" height=50>
+            <img src="../img/Logo.png" alt="Logo ITSCC" height="50">
             <span class="inst-name">Instituto Tecnológico Superior de Ciudad Constitución</span>
         </div>
 
-        <!-- Contenido principal -->
         <div class="content-area">
 
             <!-- ── Buscador y filtros ── -->
-            <div class="toolbar">
+            <div class="toolbar" style="flex-direction:column; gap:10px;">
 
-                <div class="search-box">
-                    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                    <input type="text" placeholder="Buscar libro..." id="buscador">
+                <!-- Fila 1: input + botón -->
+                <div style="display:flex; gap:8px; align-items:center; width:100%;">
+                    <div class="search-box" style="flex:1;">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <input type="text" id="buscador" placeholder="Escribe aquí para buscar..." autocomplete="off" oninput="buscarMaterial()">
+                    </div>
+                    <button class="add-btn" onclick="cargarFormulario()">+ Agregar Material</button>
                 </div>
 
-                <select class="filter-select" id="filtroCategoria">
-                    <option value="">Todas las categorías</option>
-                    <option value="ingenieria">Ingeniería</option>
-                    <option value="ciencias">Ciencias</option>
-                    <option value="matematicas">Matemáticas</option>
-                </select>
+                <!-- Fila 2: chips + selects -->
+                <div class="filtros-row">
+                    <button class="chip-filtro active" data-campo="todo"      onclick="setChip(this)">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 14 15.5l.27.28v.79l5 5L20.49 19l-5-5zm-6 0C7.01 14 5 12 5 9.5S7.01 5 9.5 5 14 7 14 9.5 12 14 9.5 14z"/></svg>
+                        Todo
+                    </button>
+                    <button class="chip-filtro" data-campo="titulo"    onclick="setChip(this)">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9h14V7H3v2zm0 4h14v-2H3v2zm0 4h7v-2H3v2zm16 0v-4h2v4h-2zm0-6h2v2h-2v-2zm0-4h2v2h-2V7z"/></svg>
+                        Título
+                    </button>
+                    <button class="chip-filtro" data-campo="autor"     onclick="setChip(this)">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                        Autor
+                    </button>
+                    <button class="chip-filtro" data-campo="isbn"      onclick="setChip(this)">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18v2H3V5zm0 4h18v2H3V9zm0 4h18v2H3v-2zm0 4h18v2H3v-2z"/></svg>
+                        ISBN
+                    </button>
+                    <button class="chip-filtro" data-campo="editorial" onclick="setChip(this)">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+                        Editorial
+                    </button>
 
-                <select class="filter-select" id="filtroEstado">
-                    <option value="">Todos los estados</option>
-                    <option value="disponible">Disponible</option>
-                    <option value="prestado">Prestado</option>
-                    <option value="prestado">Reserva</option>
-                </select>
+                    <!-- Categorías cargadas dinámicamente desde la BD -->
+                    <select class="filter-select" id="filtroClasificacion" onchange="buscarMaterial()">
+                        <option value="">Todas las clasificaciones</option>
+                        <?php
+                            $result = $conn->query("SELECT DISTINCT clasificacion FROM vista_material WHERE clasificacion IS NOT NULL ORDER BY clasificacion");
+                            while ($row = $result->fetch_assoc()) {
+                                echo '<option value="' . htmlspecialchars($row['clasificacion']) . '">' . htmlspecialchars($row['clasificacion']) . '</option>';
+                            }
+                        ?>
+                    </select>
 
-                <button class="add-btn" onclick="cargarFormulario()">+ Agregar libro</button>
-                <div id="contenedorFormulario"></div>
+                    <select class="filter-select" id="filtroTipo" onchange="buscarMaterial()">
+                        <option value="">Todos los tipos</option>
+                        <?php
+                            $result2 = $conn->query("SELECT DISTINCT tipoMaterial FROM vista_material ORDER BY tipoMaterial");
+                            while ($row2 = $result2->fetch_assoc()) {
+                                echo '<option value="' . htmlspecialchars($row2['tipoMaterial']) . '">' . htmlspecialchars($row2['tipoMaterial']) . '</option>';
+                            }
+                        ?>
+                    </select>
 
-                <script>
-                function cargarFormulario() {
-                    fetch('agregarLibro.php')
-                        .then(res => res.text())
-                        .then(html => {
-                            document.getElementById('contenedorFormulario').innerHTML = html;
-                        });
-                }
-                </script>
+                    <select class="filter-select" id="filtroEstado" onchange="buscarMaterial()">
+                        <option value="">Todos los estados</option>
+                        <option value="disponible">Disponibles</option>
+                        <option value="nodisponible">Sin disponibles</option>
+                    </select>
 
+                    <select class="filter-select" id="filtroOrden" onchange="buscarMaterial()">
+                        <option value="titulo">Ordenar: Título A–Z</option>
+                        <option value="autor">Autor A–Z</option>
+                        <option value="disponibles">Mayor disponibilidad</option>
+                        <option value="ejemplares">Más ejemplares</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- contenedor formulario agregar -->
+            <div id="contenedorFormulario"></div>
+
+            <!-- ── Resultados ── -->
+            <div style="margin-top:14px;">
+                <div class="results-header">
+                    <span id="resCount"></span>
+                </div>
+                <div id="listaResultados"></div>
+            </div>
 
         </div>
     </main>
+</div>
 
-</div>        
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ── Navegación sidebar ───────────────────────────────────────────
+function seleccionarBoton(btn) {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+}
+
+// ── Chips de filtro ──────────────────────────────────────────────
+let campoActivo    = 'todo';
+let timeoutBusqueda = null;
+
+function setChip(el) {
+    document.querySelectorAll('.chip-filtro').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    campoActivo = el.dataset.campo;
+    const ph = {
+        titulo:    'Buscar por título...',
+        autor:     'Buscar por autor...',
+        isbn:      'Buscar por ISBN...',
+        editorial: 'Buscar por editorial...',
+        todo:      'Escribe aquí para buscar...'
+    };
+    document.getElementById('buscador').placeholder = ph[campoActivo] || 'Buscar...';
+    buscarMaterial();
+}
+
+// ── Búsqueda con debounce (espera 300ms antes de buscar) ─────────
+function buscarMaterial() {
+    clearTimeout(timeoutBusqueda);
+    timeoutBusqueda = setTimeout(_ejecutarBusqueda, 300);
+}
+
+function _ejecutarBusqueda() {
+    const q              = document.getElementById('buscador').value.trim();
+    const clasificacion  = document.getElementById('filtroClasificacion').value;
+    const tipo           = document.getElementById('filtroTipo').value;
+    const estado         = document.getElementById('filtroEstado').value;
+    const orden          = document.getElementById('filtroOrden').value;
+
+    const params = new URLSearchParams({
+        q,
+        campo:         campoActivo,
+        clasificacion,
+        tipo,
+        estado,
+        orden
+    });
+
+    fetch('buscar_material.php?' + params)
+        .then(r => r.json())
+        .then(data => {
+            if (data.ok) renderTarjetas(data.materiales);
+            else mostrarError('Error al cargar los materiales: ' + data.error);
+        })
+        .catch(() => mostrarError('Error de conexión con el servidor.'));
+}
+
+// ── Renderizar tarjetas horizontales ────────────────────────────
+function renderTarjetas(materiales) {
+    const cont  = document.getElementById('listaResultados');
+    const count = document.getElementById('resCount');
+
+    count.textContent = materiales.length + ' resultado' +
+        (materiales.length !== 1 ? 's' : '') + ' encontrado' +
+        (materiales.length !== 1 ? 's' : '');
+
+    if (!materiales.length) {
+        cont.innerHTML = '<div class="sin-resultados">No se encontraron materiales para tu búsqueda.</div>';
+        return;
+    }
+
+    // Colores según clasificación (área o carrera)
+    const paleta = {
+        'Ciencias':      { bg: '#e1f5ee', tc: '#085041', sp: '#1d9e75' },
+        'Programacion':  { bg: '#f5f0c0', tc: '#5a5200', sp: '#c8c200' },
+        'Programación':  { bg: '#f5f0c0', tc: '#5a5200', sp: '#c8c200' },
+        'Economia':      { bg: '#e6f1fb', tc: '#0c447c', sp: '#378add' },
+        'Economía':      { bg: '#e6f1fb', tc: '#0c447c', sp: '#378add' },
+        'Ingenieria':    { bg: '#eaf3de', tc: '#27500a', sp: '#639922' },
+        'Ingeniería':    { bg: '#eaf3de', tc: '#27500a', sp: '#639922' },
+        'Sistemas':      { bg: '#faeeda', tc: '#633806', sp: '#ba7517' },
+        'Matematicas':   { bg: '#faeeda', tc: '#633806', sp: '#ba7517' },
+        'Matemáticas':   { bg: '#faeeda', tc: '#633806', sp: '#ba7517' },
+    };
+    const def = { bg: '#f1efe8', tc: '#444441', sp: '#888780' };
+
+    cont.innerHTML = materiales.map(m => {
+        const c   = paleta[m.clasificacion] || def;
+        const d   = parseInt(m.disponibles     ?? 0);
+        const e   = parseInt(m.totalEjemplares ?? 0);
+
+        // Color del número según disponibilidad
+        const col = d === 0 ? '#e24b4a' : d <= 1 ? '#ba7517' : '#27500a';
+        const cls = d === 0 ? 'badge-rojo' : d <= 1 ? 'badge-amarillo' : 'badge-verde';
+        const lbl = d === 0 ? 'Sin disponibles' : d + ' de ' + e + ' disp.';
+
+        // Si no es prestable, mostrar badge gris
+        const badgeDisp = m.esPrestable === 'no'
+            ? '<span class="hcard-badge badge-gris">Solo consulta</span>'
+            : '<span class="hcard-badge ' + cls + '">' + lbl + '</span>';
+
+        const dispNum = m.esPrestable === 'no'
+            ? '<div class="hcard-disp-num" style="color:#888;">—</div>'
+            : '<div class="hcard-disp-num" style="color:' + col + ';">' + d + '</div>';
+
+        return `
+        <div class="hcard" onclick="verDetalle(${m.idMaterial})">
+            <div class="hcard-icono" style="background:${c.bg};">
+                <div class="hcard-spine" style="background:${c.sp};"></div>
+                <svg width="20" height="26" viewBox="0 0 20 26" fill="none" stroke="${c.tc}" stroke-width="1.6">
+                    <rect x="3" y="1" width="13" height="21" rx="1"/>
+                    <path d="M6 1v21"/>
+                    <path d="M16 5h2v18H6"/>
+                </svg>
+            </div>
+            <div class="hcard-main">
+                <div class="hcard-title">${m.titulo}</div>
+                <div class="hcard-sub">${m.autor} · ${m.editorial} · ${m.anioPublicacion ?? ''}</div>
+                <div class="hcard-pills">
+                    <span class="hpill">${m.tipoMaterial}</span>
+                    ${m.clasificacion ? '<span class="hpill">' + m.clasificacion + '</span>' : ''}
+                    ${m.isbn          ? '<span class="hpill">ISBN: ' + m.isbn + '</span>'    : ''}
+                    ${m.edicion       ? '<span class="hpill">' + m.edicion + ' ed.</span>'  : ''}
+                </div>
+            </div>
+            <div class="hcard-right">
+                <div>
+                    ${dispNum}
+                    <div class="hcard-disp-lbl">${m.esPrestable === 'no' ? 'no prestable' : 'disponibles'}</div>
+                </div>
+                ${badgeDisp}
+                <button class="hcard-det-btn" onclick="event.stopPropagation(); verDetalle(${m.idMaterial})">Ver detalle</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function mostrarError(msg) {
+    document.getElementById('listaResultados').innerHTML =
+        '<div class="sin-resultados">' + msg + '</div>';
+}
+
+// ── Ver detalle con SweetAlert2 ──────────────────────────────────
+function verDetalle(id) {
+    fetch('buscar_material.php?q=&campo=todo&clasificacion=&tipo=&estado=&orden=titulo')
+        .then(r => r.json())
+        .then(data => {
+            const m = data.materiales.find(x => parseInt(x.idMaterial) === parseInt(id));
+            if (!m) return;
+            Swal.fire({
+                title: m.titulo,
+                html: `
+                    <table style="width:100%;text-align:left;font-size:13px;border-collapse:collapse;">
+                        <tr><td style="color:#888;padding:5px 4px;width:45%;">Autor</td>            <td><b>${m.autor}</b></td></tr>
+                        <tr><td style="color:#888;padding:5px 4px;">Editorial</td>                  <td>${m.editorial}</td></tr>
+                        <tr><td style="color:#888;padding:5px 4px;">ISBN</td>                       <td>${m.isbn || '—'}</td></tr>
+                        <tr><td style="color:#888;padding:5px 4px;">Tipo</td>                       <td>${m.tipoMaterial}</td></tr>
+                        <tr><td style="color:#888;padding:5px 4px;">Clasificación</td>              <td>${m.clasificacion || '—'}</td></tr>
+                        <tr><td style="color:#888;padding:5px 4px;">Edición</td>                    <td>${m.edicion || '—'}</td></tr>
+                        <tr><td style="color:#888;padding:5px 4px;">Año publicación</td>            <td>${m.anioPublicacion || '—'}</td></tr>
+                        <tr><td style="color:#888;padding:5px 4px;">Total ejemplares</td>           <td>${m.totalEjemplares}</td></tr>
+                        <tr><td style="color:#888;padding:5px 4px;">Disponibles</td>
+                            <td><b style="color:${parseInt(m.disponibles) > 0 ? '#27500a' : '#e24b4a'}">${m.disponibles}</b></td></tr>
+                        <tr><td style="color:#888;padding:5px 4px;">Prestable</td>
+                            <td><b>${m.esPrestable === 'si' ? 'Sí' : 'No'}</b></td></tr>
+                    </table>`,
+                confirmButtonColor: '#198754',
+                confirmButtonText: 'Cerrar'
+            });
+        });
+}
+
+// ── Formulario agregar material ──────────────────────────────────
+const reglas = {
+    'libro'      : { isbn: true,  area: true,  carrera: false, prestable: true  },
+    'revista'    : { isbn: false, area: true,  carrera: false, prestable: true  },
+    'tesis'      : { isbn: false, area: false, carrera: true,  prestable: false },
+    'residencia' : { isbn: false, area: false, carrera: true,  prestable: false },
+    'multimedia' : { isbn: false, area: false, carrera: false, prestable: false }
+};
+
+function actualizarCampos() {
+    const select = document.getElementById('tipoMaterial');
+    const tipo   = select?.options[select.selectedIndex]?.dataset.tipo || '';
+    const r      = reglas[tipo] || { isbn: false, area: false, carrera: false, prestable: false };
+    document.getElementById('campoISBN').style.display           = r.isbn      ? '' : 'none';
+    document.getElementById('campoArea').style.display           = r.area      ? '' : 'none';
+    document.getElementById('campoCarrera').style.display        = r.carrera   ? '' : 'none';
+    document.getElementById('campoPrestable').style.display      = r.prestable ? '' : 'none';
+    document.getElementById('campoEjemplaresSolo').style.display = !r.prestable && tipo !== '' ? '' : 'none';
+    if (document.getElementById('selectArea'))      document.getElementById('selectArea').required      = r.area;
+    if (document.getElementById('selectCarrera'))   document.getElementById('selectCarrera').required   = r.carrera;
+    if (document.getElementById('inputEjemplares')) document.getElementById('inputEjemplares').required = r.prestable;
+}
+
+function cargarFormulario() {
+    fetch('agregar_material.php')
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById('contenedorFormulario').innerHTML = html;
+            document.getElementById('formAgregar').scrollIntoView({ behavior: 'smooth' });
+        });
+}
+
+function cerrarFormulario() {
+    document.getElementById('contenedorFormulario').innerHTML = '';
+}
+
+// ── Cargar todos los materiales al abrir la página ───────────────
+document.addEventListener('DOMContentLoaded', () => _ejecutarBusqueda());
+</script>
 </body>
 </html>

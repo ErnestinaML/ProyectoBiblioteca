@@ -1,0 +1,73 @@
+<?php
+$conn = new mysqli("localhost", "root", "5775", "biblioteca");
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
+
+// Campos siempre obligatorios
+$titulo          = trim($_POST['titulo']          ?? '');
+$autor           = trim($_POST['autor']           ?? '');
+$anioPublicacion = trim($_POST['anioPublicacion'] ?? '');
+$editorial       = trim($_POST['editorial']       ?? '');
+$edicion         = trim($_POST['edicion']         ?? '');
+$idTipoMaterial  = trim($_POST['idTipoMaterial']  ?? '');
+
+if (!$titulo || !$autor || !$anioPublicacion || !$idTipoMaterial) {
+    header("Location: ../home/inicio.php?error=campos_vacios");
+    exit;
+}
+
+// Campos opcionales según tipo
+$isbn        = trim($_POST['isbn']        ?? '') ?: null;
+$idArea      = trim($_POST['idArea']      ?? '') ?: null;
+$idCarrera   = trim($_POST['idCarrera']   ?? '') ?: null;
+$esPrestable = $_POST['esPrestable']      ?? 'no';
+
+// Ejemplares: viene de campoPrestable o campoEjemplaresSolo
+$ejemplares  = (int)(trim($_POST['ejemplares']    ?? '') 
+            ?: trim($_POST['ejemplares_np']        ?? 0));
+
+if ($ejemplares < 1) {
+    header("Location: ../home/inicio.php?error=campos_vacios");
+    exit;
+}
+
+// Insertar en Material
+$stmt = $conn->prepare("
+    INSERT INTO Material 
+        (titulo, autor, isbn, anioPublicacion, editorial, edicion, idTipoMaterial, idArea, idCarrera, esPrestable)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+");
+$stmt->bind_param(
+    "ssssssiiss",
+    $titulo, $autor, $isbn, $anioPublicacion,
+    $editorial, $edicion, $idTipoMaterial,
+    $idArea, $idCarrera, $esPrestable
+);
+
+if (!$stmt->execute()) {
+    header("Location: inicio.php?exito=1");
+exit;
+}
+
+$idMaterial = $conn->insert_id;
+
+// Insertar ejemplares
+$stmtEj = $conn->prepare("
+    INSERT INTO Ejemplar (codigoEjemplar, idMaterial, estado)
+    VALUES (?, ?, 'disponible')
+");
+
+for ($i = 1; $i <= $ejemplares; $i++) {
+    // Código: tipo abreviado + idMaterial + número de ejemplar. Ej: LIB-12-1
+    $tiposAbrev = [1 => 'LIB', 2 => 'REV', 3 => 'TES', 4 => 'RES', 5 => 'MUL'];
+    $abrev      = $tiposAbrev[$idTipoMaterial] ?? 'MAT';
+    $codigo     = $abrev . '-' . $idMaterial . '-' . $i;
+
+    $stmtEj->bind_param("si", $codigo, $idMaterial);
+    $stmtEj->execute();
+}
+
+$conn->close();
+header("Location: ../home/inicio.php?exito=1");
+exit;

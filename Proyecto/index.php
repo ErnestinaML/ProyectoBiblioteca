@@ -100,7 +100,7 @@ if($exito === "1"){
                                     Cámbia "img/logo_its.png" por la ruta real de tu logo.
                                 -->
                                 <div class="text-center mb-4">
-                                    <img src="../administrador/img/Logo.png"
+                                    <img src="administrador/img/Logo.png"
                                          alt="Logo ITS Ciudad Constitución"
                                          style="max-height: 80px;"
                                          onerror="this.style.display='none'">
