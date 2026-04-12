@@ -1,117 +1,109 @@
-/* ── Tarjetas de resumen ── */
-.prestamo-cards {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
+/* =============================================
+   diseno_login.css — Estilos para login SIBEM
+   ============================================= */
+
+/* Color de fondo verde oscuro que se ve en la referencia */
+body {
+    background-color: #1e4d2b;
+    min-height: 100vh;
 }
 
-.prestamo-card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 1rem 1.5rem;
-    box-shadow: 0 1px 4px rgba(0,0,0,.08);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    flex: 1;
-    min-width: 160px;
-}
-
-.prestamo-card-label {
-    font-size: .8rem;
-    color: #6c757d;
-    margin-bottom: .2rem;
-}
-
-.prestamo-card-num {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #212529;
-}
-
-.prestamo-card-icon {
-    font-size: 2rem;
-}
-
-.prestamo-card-btn {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    min-width: 160px;
-}
-
-.prestamo-card-btn .add-btn {
-    width: 100%;
-    padding: .70rem;
-    background: #198754;
-    color: #fff;
-    border: none;
+/* Panel izquierdo verde claro decorativo */
+.panel-decorativo {
+    background-color: #c8e6c9;
     border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background .2s;
+    min-height: 320px;
 }
 
-.prestamo-card-btn .add-btn:hover {
-    background: #157347;
-}
-
-/* ── Tabla ── */
-.tabla-prestamos {
-    background: #fff;
-    border-radius: 10px;
-    padding: 1.5rem;
-    box-shadow: 0 1px 4px rgba(0,0,0,.08);
-}
-
-.tabla-prestamos table thead th {
-    font-size: .85rem;
-    font-weight: 600;
-    color: #495057;
-}
-
-/* Badges de estado */
-.badge-activo {
-    background: #d1e7dd;
-    color: #0f5132;
-    padding: .3rem .7rem;
-    border-radius: 20px;
-    font-size: .70rem;
-    font-weight: 600;
-}
-
-.badge-vencido {
-    background: #f8d7da;
-    color: #842029;
-    padding: .3rem .7rem;
-    border-radius: 20px;
-    font-size: .70rem;
-    font-weight: 600;
-}
-
-.badge-por-vencer {
-    background: #fff3cd;
-    color: #664d03;
-    padding: .3rem .7rem;
-    border-radius: 20px;
-    font-size: .70rem;
-    font-weight: 600;
-}
-
-/* Botón devolver */
-.btn-devolver {
-    background: #198754;
-    color: #fff;
-    border: none;
+/* Inputs con fondo verde muy claro, igual a la referencia */
+.input-sibem {
+    background-color: #e8f5e9 !important;
+    border: 1px solid #a5d6a7 !important;
     border-radius: 6px;
-    padding: .3rem .8rem;
-    font-size: .82rem;
-    cursor: pointer;
-    transition: background .2s;
 }
 
-.btn-devolver:hover {
-    background: #157347;
+.input-sibem:focus {
+    background-color: #e8f5e9 !important;
+    border-color: #388e3c !important;
+    box-shadow: 0 0 0 0.2rem rgba(56, 142, 60, 0.25) !important;
+}
+
+/* Ícono dentro del input */
+.input-group-text {
+    background-color: #e8f5e9 !important;
+    border: 1px solid #a5d6a7 !important;
+}
+
+/* Botón Login igual al de la referencia */
+.btn-login {
+    background-color: #e8f5e9;
+    border: 1px solid #a5d6a7;
+    color: #1b5e20;
+    font-weight: 500;
+}
+
+.btn-login:hover {
+    background-color: #c8e6c9;
+    border-color: #388e3c;
+    color: #1b5e20;
+}
+
+/* Link de olvidó contraseña */
+.link-olvido {
+    color: #2e7d32;
+    font-size: 0.85rem;
+    text-decoration: underline;
+}
+
+.link-olvido:hover {
+    color: #1b5e20;
+}
+
+
+/* =============================================
+   ANIMACIÓN — solo se agrega, nada de arriba
+   fue modificado ni eliminado
+   ============================================= */
+
+/* La card necesita position relative para que el canvas
+   del rayo pueda posicionarse encima de todo */
+.card {
+    position: relative;
+    overflow: hidden;
+}
+
+/* El panel decorativo cambia a fondo oscuro para la animación */
+.panel-decorativo.anim-activa {
+    background-color: #0d1f15 !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Canvas de escena — ocupa todo el panel izquierdo */
+#animCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+    border-radius: 8px;
+}
+
+
+/* Brillo verde en inputs cuando la onda los toca */
+.input-sibem.lit {
+    border-color: #5adf9a !important;
+    box-shadow: 0 0 14px rgba(80, 220, 140, 0.55) !important;
+}
+
+/* Brillo en botón login */
+.btn-login.lit {
+    border-color: #5adf9a !important;
+    box-shadow: 0 0 18px rgba(80, 220, 140, 0.65) !important;
+}
+
+/* Brillo en el título "Welcome back to SIBEM" */
+.titulo-sibem.lit {
+    text-shadow: 0 0 18px rgba(80, 220, 140, 0.8);
+    color: #1a5a2a !important;
 }

@@ -1,0 +1,165 @@
+/* =============================================
+   diseno_adeudos.css — Estilos del widget adeudos
+   ============================================= */
+
+.aw-metricas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 18px;
+}
+.aw-card {
+    background: #fff;
+    border: 1.5px solid #c8e6a0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.aw-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.aw-icon.rojo  { background: #fcebeb; color: #a32d2d; }
+.aw-icon.ambar { background: #faeeda; color: #854f0b; }
+.aw-icon.verde { background: #eaf3de; color: #3b6d11; }
+.aw-card-label { font-size: .78rem; color: #666; margin-bottom: 3px; }
+.aw-card-valor { font-size: 1.5rem; font-weight: 600; color: #1a1a00; line-height: 1; }
+
+.aw-panel {
+    background: #fff;
+    border: 1.5px solid #c8e6a0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.aw-panel-title {
+    padding: 14px 18px 10px;
+    font-size: .97rem;
+    font-weight: 600;
+    color: #1a1a00;
+    border-bottom: 1px solid #e8f0d0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.aw-filtros {
+    display: flex;
+    gap: 10px;
+    padding: 12px 18px;
+    border-bottom: 1px solid #f0f0e0;
+    align-items: center;
+}
+
+/* ✅ FIX PRINCIPAL: el SVG dentro del buscador no debe ser grande */
+.aw-sw {
+    flex: 1;
+    position: relative;
+}
+.aw-sw svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+    width: 14px !important;   /* fuerza tamaño pequeño */
+    height: 14px !important;
+    pointer-events: none;
+}
+.aw-sw input {
+    width: 100%;
+    padding: 8px 12px 8px 32px;
+    border: 1px solid #d4e8a0;
+    border-radius: 6px;
+    font-size: .85rem;
+    outline: none;
+    font-family: inherit;
+    background: #f9fdf2;
+    transition: border-color .2s;
+}
+.aw-sw input:focus { border-color: #4a7c2e; }
+
+.aw-sel {
+    padding: 8px 10px;
+    border: 1px solid #d4e8a0;
+    border-radius: 6px;
+    font-size: .85rem;
+    font-family: inherit;
+    outline: none;
+    min-width: 160px;
+    background: #f9fdf2;
+    cursor: pointer;
+}
+
+/* Tabla */
+.aw-table { width: 100%; border-collapse: collapse; }
+.aw-table thead tr {
+    background: #f5faea;
+    border-bottom: 1.5px solid #ddeead;
+}
+.aw-table th {
+    padding: 9px 14px;
+    font-size: .78rem;
+    font-weight: 600;
+    color: #4a7c2e;
+    text-align: left;
+    white-space: nowrap;
+}
+/* ✅ FIX: SVGs dentro de los th también deben ser pequeños */
+.aw-table th svg {
+    vertical-align: middle;
+    margin-right: 3px;
+    width: 11px !important;
+    height: 11px !important;
+}
+.aw-table tbody tr {
+    border-bottom: 1px solid #f5f5ea;
+    transition: background .13s;
+}
+.aw-table tbody tr:hover { background: #fafff0; }
+.aw-table tbody tr:last-child { border-bottom: none; }
+.aw-table td {
+    padding: 10px 14px;
+    font-size: .85rem;
+    color: #1a1a1a;
+    vertical-align: middle;
+}
+.aw-empty {
+    text-align: center;
+    padding: 36px;
+    color: #aaa;
+    font-size: .88rem;
+}
+/* ✅ FIX: SVG del mensaje vacío también */
+.aw-empty svg {
+    width: 32px !important;
+    height: 32px !important;
+    opacity: .3;
+    display: block;
+    margin: 0 auto 6px;
+}
+
+.aw-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: .76rem;
+    font-weight: 500;
+    border: 1.5px solid;
+}
+.aw-badge.pendiente { color: #a32d2d; border-color: #a32d2d; background: #fff5f5; }
+.aw-badge.pagado    { color: #1e7e34; border-color: #1e7e34; background: #f0fff4; }
+
+/* ✅ FIX: el SVG del título del panel tampoco debe heredar tamaño */
+.aw-panel-title svg {
+    width: 16px !important;
+    height: 16px !important;
+    flex-shrink: 0;
+}
+
+@media (max-width: 700px) {
+    .aw-metricas { grid-template-columns: 1fr; }
+}
