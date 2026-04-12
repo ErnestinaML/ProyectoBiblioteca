@@ -1,0 +1,68 @@
+
+/* toolbar */
+.toolbar { display:flex; gap:8px; margin-bottom:14px; align-items:center; flex-wrap:wrap; }
+.search-box { flex:1; display:flex; align-items:center; gap:6px; border:1.5px solid #ccc; border-radius:6px; padding:6px 10px; background:#fff; }
+.search-box input { border:none; outline:none; font-size:13px; width:100%; background:transparent; }
+.fsel { padding:7px 10px; border:1.5px solid #ccc; border-radius:6px; font-size:12px; color:#555; background:#fff; outline:none; }
+.fsel:focus { border-color:#b8b800; }
+.btn-add { padding:7px 14px; background:#2d6a2d; border:none; border-radius:6px; font-size:12px; color:#fff; cursor:pointer; white-space:nowrap; }
+.btn-add:hover { background:#1f4d1f; }
+
+/* tabla */
+.tw { background:#fff; border:1.5px solid #e0e0c0; border-radius:8px; overflow:hidden; }
+.tw table { width:100%; border-collapse:collapse; font-size:12px; }
+.tw thead tr { background:#f9f9f0; }
+.tw th { padding:9px 12px; text-align:left; font-weight:500; color:#555; font-size:11px; border-bottom:1.5px solid #e0e0c0; }
+.tw td { padding:9px 12px; color:#333; border-bottom:.5px solid #f0f0f0; vertical-align:middle; }
+.tw tr.clickable:hover td { background:#fffdf5; cursor:pointer; }
+.res-count { font-size:12px; color:#888; margin-bottom:8px; }
+
+/* badges */
+.badge    { display:inline-block; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:500; }
+.ba       { background:#eaf3de; color:#27500a; }
+.bi       { background:#fcebeb; color:#791f1f; }
+.bb       { background:#e6f1fb; color:#0c447c; }
+.bp       { background:#eeedfe; color:#3c3489; }
+.bam      { background:#faeeda; color:#633806; }
+.bss      { background:#e1f5ee; color:#085041; }
+
+/* botones de acción en tabla */
+.ic-btn { width:26px; height:26px; border-radius:5px; border:none; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; margin:0 2px; }
+
+/* modales */
+.mbg { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:1000; align-items:center; justify-content:center; }
+.mbg.open { display:flex; }
+.modal-sibem { background:#fff; border:2px solid #b8b800; border-radius:10px; padding:20px 22px; width:500px; max-width:95%; max-height:90vh; overflow-y:auto; }
+.modal-sm { width:380px; }
+.mh { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid #eee; }
+.mh h2 { font-size:14px; font-weight:600; color:#1a1a00; }
+.mx { background:none; border:none; font-size:22px; color:#aaa; cursor:pointer; line-height:1; }
+.mf { display:flex; justify-content:space-between; padding:7px 0; border-bottom:.5px solid #f0f0f0; font-size:12px; }
+.mf:last-child { border-bottom:none; }
+.mfk { color:#888; }
+.mfv { color:#1a1a00; font-weight:500; }
+
+/* formulario dentro del modal */
+.fg { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.fl { display:flex; flex-direction:column; gap:4px; }
+.fl label { font-size:11px; color:#666; font-weight:500; }
+.fl input, .fl select { padding:7px 10px; border:1px solid #ccc; border-radius:6px; font-size:12px; outline:none; }
+.fl input:focus, .fl select:focus { border-color:#b8b800; }
+.fl input[readonly] { background:#f5f5f5; color:#888; }
+fieldset { border:1px solid #ddd; border-radius:7px; padding:10px 14px; margin-bottom:10px; }
+legend { font-size:10px; font-weight:600; color:#888; padding:0 5px; text-transform:uppercase; letter-spacing:.04em; }
+.radio-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.rl { display:flex; align-items:center; gap:6px; font-size:12px; color:#444; cursor:pointer; }
+.rl input { accent-color:#b8b800; width:13px; height:13px; }
+.campo-extra { display:none; margin-bottom:10px; }
+
+/* botones del modal */
+.form-btns { display:flex; gap:8px; justify-content:flex-end; margin-top:14px; padding-top:12px; border-top:1px solid #eee; }
+.btn-red { padding:7px 14px; background:#fcebeb; border:1.5px solid #f09595; border-radius:6px; font-size:12px; font-weight:500; color:#791f1f; cursor:pointer; }
+.btn-grn { padding:7px 14px; background:#2d6a2d; border:none; border-radius:6px; font-size:12px; font-weight:500; color:#fff; cursor:pointer; }
+.btn-yel { padding:7px 14px; background:#f5e840; border:1.5px solid #b8b800; border-radius:6px; font-size:12px; font-weight:500; color:#1a1a00; cursor:pointer; }
+
+/* SweetAlert siempre encima de los modales */
+.swal2-container {
+    z-index: 99999 !important;
+}

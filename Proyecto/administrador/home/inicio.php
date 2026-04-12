@@ -13,77 +13,7 @@ if ($conn->connect_error) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="diseno.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        .chip-filtro {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 13px;
-            border: 1.5px solid #ccc;
-            border-radius: 6px;
-            background: #fff;
-            font-size: 12px;
-            color: #444;
-            cursor: pointer;
-            transition: border-color .12s, background .12s;
-        }
-        .chip-filtro:hover  { border-color: #b8b800; background: #fafae0; }
-        .chip-filtro.active { background: #f5e840; border-color: #b8b800; font-weight: 500; color: #1a1a00; }
-
-        .hcard {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            border: 1px solid #e0e0c0;
-            border-radius: 8px;
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            background: #fff;
-            cursor: pointer;
-            transition: border-color .12s, background .12s;
-        }
-        .hcard:hover { border-color: #b8b800; background: #fffdf5; }
-
-        .hcard-icono {
-            width: 42px;
-            height: 54px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            position: relative;
-        }
-        .hcard-spine {
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 7px;
-            border-radius: 5px 0 0 5px;
-            opacity: .45;
-        }
-        .hcard-main        { flex: 1; min-width: 0; }
-        .hcard-title       { font-size: 13px; font-weight: 500; color: #1a1a00; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .hcard-sub         { font-size: 11px; color: #666; margin-bottom: 6px; }
-        .hcard-pills       { display: flex; gap: 5px; flex-wrap: wrap; }
-        .hpill             { font-size: 10px; padding: 2px 8px; border-radius: 10px; border: 1px solid #ddd; color: #666; background: #f9f9f0; }
-
-        .hcard-right       { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; min-width: 90px; }
-        .hcard-disp-num    { font-size: 22px; font-weight: 500; line-height: 1; }
-        .hcard-disp-lbl    { font-size: 10px; color: #aaa; }
-        .hcard-badge       { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 500; }
-        .badge-verde       { background: #eaf3de; color: #27500a; }
-        .badge-amarillo    { background: #faeeda; color: #633806; }
-        .badge-rojo        { background: #fcebeb; color: #791f1f; }
-        .badge-gris        { background: #f1efe8; color: #444441; }
-
-        .hcard-det-btn     { padding: 4px 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 11px; background: #fff; cursor: pointer; color: #555; }
-        .hcard-det-btn:hover { border-color: #b8b800; background: #fafae0; }
-
-        .sin-resultados    { text-align: center; padding: 40px 20px; color: #aaa; font-size: 13px; }
-        .filtros-row       { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
-        .results-header    { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .results-header span { font-size: 13px; color: #555; }
-    </style>
+   
 </head>
 <body>
 
@@ -138,20 +68,26 @@ if ($conn->connect_error) {
                 <svg fill="currentColor" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5M9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8m1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5m-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96q.04-.245.04-.5M7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0"/></svg>
                 Préstamos
             </button>
-            <button class="nav-btn" onclick="seleccionarBoton(this);">
+            <button class="nav-btn" onclick="seleccionarBoton(this); location.href='../usuarios/usuarios.php'">
+
                 <svg fill="currentColor" viewBox="0 0 16 16"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/></svg>
                 Usuarios
             </button>
+<<<<<<< HEAD
             <button class="nav-btn" onclick="seleccionarBoton(this); location.href='../adeudos/adeudos.php'">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+=======
+            <button class="nav-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+>>>>>>> d5f4989004c2586faa5435c0fc2a2ee70b998162
                 Adeudos
             </button>
-            <button class="nav-btn" onclick="seleccionarBoton(this);">
+            <button class="nav-btn">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
                 Estadísticas
             </button>
-             <button class="nav-btn" onclick="seleccionarBoton(this);">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+            <button class="nav-btn">
+                <svg fill="currentColor" viewBox="0 0 20 16"><path d="M8 7a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1z"/><path d="M16 7l-3.5 1.4v3c0 1.4 1.2 2.5 3.5 2.8 2.3-.3 3.5-1.4 3.5-2.8v-3z" fill="white" stroke="currentColor" stroke-width="0.8"/><path d="M14.2 11l1.1 1.1 2.2-2.2" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/> </svg>
                 Roles
             </button>
         </nav>
